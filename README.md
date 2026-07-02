@@ -1,4 +1,5 @@
 Carrito de Compras — Migración de Flask a Express
+
 Este proyecto es la migración de una API de carrito de compras que originalmente estaba hecha en Flask (Python) a Node.js con Express. Le sumé un frontend tipo SPA en HTML/JS vainilla, persistencia con SQLite y tests E2E con Selenium.
 
 Arquitectura elegida
