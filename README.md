@@ -72,11 +72,17 @@ Como el carrito es único para toda la app (sin usuarios), me di cuenta de que s
 
 
 Cómo correr el proyecto localmente
+
 bashnpm install
+
 node server.js
+
 Después abrir http://localhost:3000 en el navegador.
 
 Cómo correr los tests
+
 Con el servidor corriendo en otra terminal:
+
 bashpip install pytest selenium
+
 pytest tests/test_carrito.py -v
