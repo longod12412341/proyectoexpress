@@ -1,0 +1,3 @@
+node_modules/
+database/carrito.db
+database/carrito_test.db

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carrito de Compras</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg:       #F5F0E8;
+      --surface:  #FFFDF7;
+      --border:   #E2D9C8;
+      --text:     #1A1612;
+      --muted:    #8A7F72;
+      --accent:   #2D6A4F;
+      --accent2:  #D4A017;
+      --danger:   #C0392B;
+      --radius:   12px;
+    }
+ 
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+ 
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+ 
+    header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      letter-spacing: -0.5px;
+    }
+ 
+    header span {
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+ 
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+ 
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+ 
+    /* ── PRODUCTOS ── */
+    .productos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+ 
+    .producto-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+ 
+    .producto-card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+ 
+    .producto-nombre {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+ 
+    .producto-precio {
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+ 
+    .producto-stock {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+ 
+    .cantidad-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+ 
+    .cantidad-row input {
+      width: 56px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: var(--bg);
+      color: var(--text);
+      text-align: center;
+    }
+ 
+    .btn {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+ 
+    .btn:active { transform: scale(0.97); }
+ 
+    .btn-add {
+      background: var(--accent);
+      color: #fff;
+    }
+ 
+    .btn-add:hover { opacity: 0.88; }
+ 
+    /* ── CARRITO ── */
+    .carrito-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: sticky;
+      top: 24px;
+      height: fit-content;
+    }
+ 
+    .carrito-vacio {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 32px 0;
+    }
+ 
+    .carrito-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 8px;
+    }
+ 
+    .carrito-item:last-of-type { border-bottom: none; }
+ 
+    .item-info { flex: 1; }
+ 
+    .item-nombre {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+ 
+    .item-detalle {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+ 
+    .item-subtotal {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+ 
+    .btn-remove {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      color: var(--danger);
+      font-size: 0.8rem;
+      font-family: inherit;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+ 
+    .btn-remove:hover { background: #fdecea; }
+ 
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      margin-top: 8px;
+      border-top: 2px solid var(--text);
+    }
+ 
+    .total-label {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+    }
+ 
+    .total-valor {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+    }
+ 
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--text);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 0.88rem;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      z-index: 999;
+    }
+ 
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+ 
+    #toast.error { background: var(--danger); }
+  </style>
+</head>
+<body>
+ 
+<header>
+  <h1>Compras Gamer</h1>
+  <button onclick="window.location.href='carrito.html'">Carrito</button>
+</header>
+ 
+<div class="layout">
+ 
+  <!-- PRODUCTOS -->
+  <div>
+    <p class="section-title">Productos disponibles</p>
+    <div class="productos-grid" id="productos-grid">
+      <p style="color:var(--muted); font-size:.9rem;">Cargando productos...</p>
+    </div>
+  </div>
+ 
+  <!-- CARRITO -->
+  <div>
+    <p class="section-title">Tu carrito</p>
+    <div class="carrito-panel">
+      <div id="carrito-items">
+        <p class="carrito-vacio">El carrito está vacío</p>
+      </div>
+      <div class="total-row" id="total-row" style="display:none;">
+        <span class="total-label">Total</span>
+        <span class="total-valor" id="total-valor">$0</span>
+      </div>
+    </div>
+  </div>
+ 
+</div>
+ 
+<div id="toast"></div>
+ 
+<script>
+  // Helpers 
+ 
+  function formatPrecio(n) {
+    return '$' + Number(n).toLocaleString('es-AR');
+  }
+ 
+  function toast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'show' + (isError ? ' error' : '');
+    setTimeout(() => t.className = '', 2500);
+  }
+ 
+  // Cargar productos 
+ 
+ async function cargarProductos() {
+    try {
+      const res  = await fetch('/productos');
+      const data = await res.json();
+      catalogoCache = data; // { "1": {...}, "2": {...} }
+
+      const grid = document.getElementById('productos-grid');
+      grid.innerHTML = '';
+
+      Object.values(data).forEach(p => {
+        grid.innerHTML += `
+          <div class="producto-card">
+            <div>
+              <p class="producto-nombre">${p.nombre}</p>
+              <p class="producto-precio">${formatPrecio(p.precio)}</p>
+              <p class="producto-stock">Stock: ${p.stock} unidades</p>
+            </div>
+            <div class="cantidad-row">
+              <input type="number" id="cant-${p.id}" value="1" min="1" max="${p.stock}"/>
+              <button class="btn btn-add" onclick="agregarAlCarrito('${p.id}')">
+                + Agregar
+              </button>
+            </div>
+          </div>`;
+      });
+    } catch {
+      toast('Error al cargar productos', true);
+    }
+  }
+
+  // ── Agregar al carrito ────────────────────────────────────
+ 
+  async function agregarAlCarrito(productoId) {
+    const cantidad = parseInt(document.getElementById(`cant-${productoId}`).value);
+
+    const res = await fetch('/carrito', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ producto_id: productoId, cantidad })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      toast(data.error || 'Error al agregar', true);
+      return;
+    }
+
+    const nombreProducto = catalogoCache[productoId].nombre;
+    toast(`✓ ${nombreProducto} agregado al carrito`);
+    cargarCarrito();
+  }
+
+ 
+  // Cargar carrito 
+  async function cargarCarrito() {
+    try {
+      const [resItems, resTotal] = await Promise.all([
+        fetch('/carrito'),
+        fetch('/carrito/total')
+      ]);
+
+      const items = await resItems.json();
+      const total = await resTotal.json();
+
+      const contenedor = document.getElementById('carrito-items');
+      const totalRow   = document.getElementById('total-row');
+
+      if (items.length === 0) {
+        contenedor.innerHTML = '<p class="carrito-vacio">El carrito está vacío</p>';
+        totalRow.style.display = 'none';
+        return;
+      }
+
+      contenedor.innerHTML = items.map(item => `
+        <div class="carrito-item">
+          <div class="item-info">
+            <p class="item-nombre">${item.nombre}</p>
+            <p class="item-detalle">${item.cantidad} × ${formatPrecio(item.precio)}</p>
+          </div>
+          <span class="item-subtotal">${formatPrecio(item.precio * item.cantidad)}</span>
+          <button class="btn-remove" onclick="eliminarDelCarrito('${item.producto_id}')">✕</button>
+        </div>`).join('');
+
+      document.getElementById('total-valor').textContent = formatPrecio(total.total);
+      totalRow.style.display = 'flex';
+
+    } catch {
+      toast('Error al cargar el carrito', true);
+    }
+  }
+ 
+  // Eliminar del carrito 
+ 
+ async function eliminarDelCarrito(productoId) {
+    const res = await fetch(`/carrito/${productoId}`, { method: 'DELETE' });
+
+    if (!res.ok) {
+      toast('Error al eliminar', true);
+      return;
+    }
+
+    toast('Producto eliminado del carrito');
+    cargarCarrito();
+  }
+
+ 
+  //  Inicializar 
+ 
+  cargarProductos();
+  cargarCarrito();
+</script>
+ 
+</body>
+</html>
