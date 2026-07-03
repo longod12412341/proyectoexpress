@@ -54,20 +54,15 @@ Render para el deploy
 Dificultades que encontré y cómo las resolví
 
 
-1. El orden de las rutas en Express importa.
-
-Al principio tenía un middleware app.use() sin ninguna ruta específica, que capturaba cualquier petición sin importar la URL. Como lo había puesto antes de una ruta particular (/info), esa ruta nunca se llegaba a ejecutar porque el middleware general le respondía primero al usuario. Ahí entendí que Express evalúa las rutas en el orden en que están escritas, de arriba hacia abajo. Lo solucioné moviendo el manejador de 404 al final del archivo, después de todas las rutas específicas.
-
-2. El frontend y el backend no "hablaban el mismo idioma".
-Mi frontend ya estaba armado y probado, y esperaba el catálogo como un array y un campo llamado precio_unitario en los ítems del carrito. Pero mi backend migrado devolvía un objeto (no un array) y usaba el nombre precio. En vez de tocar el backend (que ya tenía andando), decidí adaptar las funciones del frontend para que consuman los datos tal cual los devuelve mi API. Me sirvió para entender que frontend y backend se ponen de
+1. Mi frontend ya estaba armado y probado, y esperaba el catálogo como un array y un campo llamado precio_unitario en los ítems del carrito. Pero mi backend migrado devolvía un objeto (no un array) y usaba el nombre precio. En vez de tocar el backend (que ya tenía andando), decidí adaptar las funciones del frontend para que consuman los datos tal cual los devuelve mi API. Me sirvió para entender que frontend y backend se ponen de
 acuerdo en un "contrato" de datos, y que cuando cambiás de framework ese contrato puede variar.
-3. Qué método HTTP usar para restar cantidad del carrito.
+2. Qué método HTTP usar para restar cantidad del carrito.
 Restar una unidad de un producto no encaja perfectamente en las operaciones típicas de un CRUD. Lo correcto según REST hubiera sido usar PUT o PATCH, porque es una actualización, pero como en la materia todavía no vimos esos métodos, terminé usando POST para esa acción también.
 
-4. La persistencia en Render se pierde con el tiempo.
+3. La persistencia en Render se pierde con el tiempo.
 Me di cuenta de que el plan gratuito de Render no tiene disco persistente: cuando el servidor se "duerme" por inactividad y se vuelve a levantar, el archivo carrito.db se resetea. Decidí aceptar esta limitación porque el alcance del trabajo es académico y la persistencia sí funciona correctamente en mi entorno local, que es donde valido que el requerimiento se cumple. Una mejora a futuro sería usar un disco persistente (de pago) en Render.
 
-6. Evitar que los tests se pisen entre sí.
+4. Evitar que los tests se pisen entre sí.
 Como el carrito es único para toda la app (sin usuarios), me di cuenta de que si corría varios tests seguidos, uno podía dejar datos que afectaran al siguiente. Lo resolví agregando una fixture de pytest que se ejecuta automáticamente antes de cada test y vacía la tabla carrito por SQL, así cada test arranca siempre desde cero.
 
 
