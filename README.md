@@ -60,7 +60,7 @@ acuerdo en un "contrato" de datos, y que cuando cambiás de framework ese contra
 Restar una unidad de un producto no encaja perfectamente en las operaciones típicas de un CRUD. Lo correcto según REST hubiera sido usar PUT o PATCH, porque es una actualización, pero como en la materia todavía no vimos esos métodos, terminé usando POST para esa acción también.
 
 3. La persistencia en Render se pierde con el tiempo.
-Me di cuenta de que el plan gratuito de Render no tiene disco persistente: cuando el servidor se "duerme" por inactividad y se vuelve a levantar, el archivo carrito.db se resetea. Decidí aceptar esta limitación porque el alcance del trabajo es académico y la persistencia sí funciona correctamente en mi entorno local, que es donde valido que el requerimiento se cumple. Una mejora a futuro sería usar un disco persistente (de pago) en Render.
+Me di cuenta de que el plan gratuito de Render no tiene disco persistente: cuando el servidor se duerme por inactividad y se vuelve a levantar, el archivo carrito.db se resetea.
 
 4. Evitar que los tests se pisen entre sí.
 Como el carrito es único para toda la app (sin usuarios), me di cuenta de que si corría varios tests seguidos, uno podía dejar datos que afectaran al siguiente. Lo resolví agregando una fixture de pytest que se ejecuta automáticamente antes de cada test y vacía la tabla carrito por SQL, así cada test arranca siempre desde cero.
@@ -68,7 +68,7 @@ Como el carrito es único para toda la app (sin usuarios), me di cuenta de que s
 
 Cómo correr el proyecto localmente
 
-bashnpm install
+npm install
 
 node server.js
 
@@ -78,6 +78,6 @@ Cómo correr los tests
 
 Con el servidor corriendo en otra terminal:
 
-bashpip install pytest selenium
+pip install pytest selenium
 
 pytest tests/test_carrito.py -v
