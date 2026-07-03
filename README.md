@@ -33,7 +33,7 @@ GET/carrito/totalDevuelve el total de la compra
 
 POST/carritoAgrega un producto (o suma cantidad si ya estaba)
 
-POST/carrito/:id/decrementarResta una unidad (elimina el ítem si llega a 0)
+PUT/carrito/:id/decrementarResta una unidad (elimina el ítem si llega a 0)
 
 DELETE/carrito/:idElimina el ítem completo del carrito
 
