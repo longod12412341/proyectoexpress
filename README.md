@@ -81,3 +81,6 @@ Con el servidor corriendo en otra terminal:
 pip install pytest selenium
 
 pytest tests/test_carrito.py -v
+
+link del deploy: https://proyectoexpress-s622.onrender.com/index.html
+
