@@ -272,7 +272,7 @@
   }
 
   async function decrementar(productoId) {
-  const res = await fetch(`/carrito/${productoId}/decrementar`, { method: 'POST' });
+  const res = await fetch(`/carrito/${productoId}/decrementar`, { method: 'PUT' });
 
   if (!res.ok) {
     toast('Error al actualizar cantidad', true);

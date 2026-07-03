@@ -33,36 +33,31 @@ router.post("/", (req, res) => {
     return res.status(404).json({ error: "Producto no encontrado" });
   }
 
-  const cantidadAAgregar = cantidad || 1;
+  const cantidadAgregar = cantidad || 1;
   const itemExistente = db.prepare("SELECT * FROM carrito WHERE producto_id = ?").get(producto_id);
 
   if (itemExistente) {
     db.prepare("UPDATE carrito SET cantidad = cantidad + ? WHERE producto_id = ?")
-      .run(cantidadAAgregar, producto_id);
+      .run(cantidadAgregar, producto_id);
   } else {
     db.prepare("INSERT INTO carrito (producto_id, cantidad) VALUES (?, ?)")
-      .run(producto_id, cantidadAAgregar);
+      .run(producto_id, cantidadAgregar);
   }
 
   res.status(201).json({ mensaje: "Producto agregado al carrito" });
 });
 
 // POST /carrito/:producto_id/decrementar - resta 1; si llega a 0, elimina la fila
-router.post("/:producto_id/decrementar", (req, res) => {
+router.put("/:producto_id/decrementar", (req, res) => {
   const { producto_id } = req.params;
-
   const item = db.prepare("SELECT * FROM carrito WHERE producto_id = ?").get(producto_id);
-  if (!item) {
-    return res.status(404).json({ error: "Producto no encontrado en el carrito" });
-  }
+  if (!item) return res.status(404).json({ error: "Producto no encontrado en el carrito" });
 
   if (item.cantidad <= 1) {
     db.prepare("DELETE FROM carrito WHERE producto_id = ?").run(producto_id);
   } else {
-    db.prepare("UPDATE carrito SET cantidad = cantidad - 1 WHERE producto_id = ?")
-      .run(producto_id);
+    db.prepare("UPDATE carrito SET cantidad = cantidad - 1 WHERE producto_id = ?").run(producto_id);
   }
-
   res.json({ mensaje: "Cantidad actualizada" });
 });
 

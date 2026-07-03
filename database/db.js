@@ -19,7 +19,7 @@ db.exec(`
   );
 `);
 
-// Seed: carga el catálogo original solo si la tabla está vacía
+// carga el catálogo original solo si la tabla está vacía
 const { total } = db.prepare("SELECT COUNT(*) as total FROM productos").get();
 if (total === 0) {
   const catalogo = [
