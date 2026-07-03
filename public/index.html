@@ -50,6 +50,17 @@
       padding: 6px 14px;
       border-radius: 20px;
     }
+    
+    header button {
+      font-size: 0.85rem;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: inherit;
+    }
  
     .layout {
       display: grid;
@@ -290,7 +301,7 @@
 <div id="toast"></div>
  
 <script>
-  // Helpers 
+
  
   function formatPrecio(n) {
     return '$' + Number(n).toLocaleString('es-AR');
@@ -309,7 +320,7 @@
     try {
       const res  = await fetch('/productos');
       const data = await res.json();
-      catalogoCache = data; // { "1": {...}, "2": {...} }
+      catalogoCache = data;
 
       const grid = document.getElementById('productos-grid');
       grid.innerHTML = '';
@@ -335,7 +346,7 @@
     }
   }
 
-  // ── Agregar al carrito ────────────────────────────────────
+  // Agregar al carrito
  
   async function agregarAlCarrito(productoId) {
     const cantidad = parseInt(document.getElementById(`cant-${productoId}`).value);

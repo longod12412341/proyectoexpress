@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db");
 
-// GET /carrito - ver contenido con datos del producto
+// GET carrito - ver contenido con datos del producto
 router.get("/", (req, res) => {
   const items = db.prepare(`
     SELECT c.producto_id, c.cantidad, p.nombre, p.precio
@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
   res.json(items);
 });
 
-// GET /carrito/total
+// GET carrito total
 router.get("/total", (req, res) => {
   const { total } = db.prepare(`
     SELECT SUM(c.cantidad * p.precio) as total
@@ -24,7 +24,7 @@ router.get("/total", (req, res) => {
   res.json({ total: total || 0 });
 });
 
-// POST /carrito - agregar producto (o sumar cantidad si ya existe)
+// POST  agregar producto o sumar cantidad si ya existe
 router.post("/", (req, res) => {
   const { producto_id, cantidad } = req.body;
 
