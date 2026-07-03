@@ -56,13 +56,11 @@ Dificultades que encontré y cómo las resolví
 
 1. Mi frontend ya estaba armado y probado, y esperaba el catálogo como un array y un campo llamado precio_unitario en los ítems del carrito. Pero mi backend migrado devolvía un objeto (no un array) y usaba el nombre precio. En vez de tocar el backend (que ya tenía andando), decidí adaptar las funciones del frontend para que consuman los datos tal cual los devuelve mi API. Me sirvió para entender que frontend y backend se ponen de
 acuerdo en un "contrato" de datos, y que cuando cambiás de framework ese contrato puede variar.
-2. Qué método HTTP usar para restar cantidad del carrito.
-Restar una unidad de un producto no encaja perfectamente en las operaciones típicas de un CRUD. Lo correcto según REST hubiera sido usar PUT o PATCH, porque es una actualización, pero como en la materia todavía no vimos esos métodos, terminé usando POST para esa acción también.
 
-3. La persistencia en Render se pierde con el tiempo.
+2. La persistencia en Render se pierde con el tiempo.
 Me di cuenta de que el plan gratuito de Render no tiene disco persistente: cuando el servidor se duerme por inactividad y se vuelve a levantar, el archivo carrito.db se resetea.
 
-4. Evitar que los tests se pisen entre sí.
+3. Evitar que los tests se pisen entre sí.
 Como el carrito es único para toda la app (sin usuarios), me di cuenta de que si corría varios tests seguidos, uno podía dejar datos que afectaran al siguiente. Lo resolví agregando una fixture de pytest que se ejecuta automáticamente antes de cada test y vacía la tabla carrito por SQL, así cada test arranca siempre desde cero.
 
 
